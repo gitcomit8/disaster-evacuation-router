@@ -1,0 +1,58 @@
+version: '3.8'
+
+services:
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+
+  backend:
+    build:
+      context: .
+      dockerfile: backend/Dockerfile
+    ports:
+      - "5000:5000"
+    environment:
+      NODE_ENV: development
+      PORT: 5000
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
+      WS_CORS_ORIGIN: "http://localhost:5173"
+      COST_ALPHA: 1.0
+      COST_BETA: 0.5
+      COST_GAMMA: 2.0
+      HAZARD_SPAWN_INTERVAL: 5000
+      HAZARD_EXPANSION_RATE: 0.1
+      HAZARD_MAX_RADIUS: 500
+    depends_on:
+      redis:
+        condition: service_healthy
+    volumes:
+      - ./backend/src:/app/backend/src
+      - ./backend/tests:/app/backend/tests
+
+  frontend:
+    build:
+      context: .
+      dockerfile: frontend/Dockerfile
+    ports:
+      - "5173:3000"
+    environment:
+      VITE_API_URL: "http://localhost:5000"
+      VITE_WS_URL: "ws://localhost:5000"
+    depends_on:
+      - backend
+
+volumes:
+  redis_data:
+
+networks:
+  default:
+    name: disaster-network
