@@ -47,12 +47,13 @@ class MinPriorityQueue {
  * @param {string} endVertexId - Destination vertex ID
  * @returns {Object} { path: Array<string>, distance: number, expanded: number }
  */
-function dijkstra(graph, startVertexId, endVertexId) {
+function dijkstra(graph, startVertexId, endVertexId, trackSteps = true) {
   // Initialize distances and previous nodes
   const distances = new Map();
   const previous = new Map();
   const visited = new Set();
   const pq = new MinPriorityQueue();
+  const explorationSteps = trackSteps ? [] : null;
 
   const allVertices = graph.getAllVertices();
 
@@ -73,6 +74,15 @@ function dijkstra(graph, startVertexId, endVertexId) {
     if (visited.has(currentVertexId)) continue;
     visited.add(currentVertexId);
     expandedCount++;
+
+    // Track exploration step
+    if (trackSteps) {
+      explorationSteps.push({
+        currentVertex: currentVertexId,
+        visitedVertices: Array.from(visited),
+        distances: Object.fromEntries(distances),
+      });
+    }
 
     // Early termination if we reached the destination
     if (currentVertexId === endVertexId) {
@@ -118,6 +128,7 @@ function dijkstra(graph, startVertexId, endVertexId) {
     distance: distances.get(endVertexId),
     nodesExpanded: expandedCount,
     found: isValidPath && path[path.length - 1] === endVertexId,
+    explorationSteps: trackSteps ? explorationSteps : undefined,
   };
 }
 

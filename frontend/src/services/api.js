@@ -23,6 +23,12 @@ const api = {
   // Routing
   dijkstra: (start, end) => apiClient.post('/route/dijkstra', { start, end }),
   aStar: (start, end) => apiClient.post('/route/astar', { start, end }),
+
+  // Generic post method
+  post: (endpoint, data) => apiClient.post(endpoint, data),
+
+  // Generic get method
+  get: (endpoint) => apiClient.get(endpoint),
 };
 
 export default api;

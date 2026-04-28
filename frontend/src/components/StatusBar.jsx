@@ -10,12 +10,12 @@ const StatusBar = ({ connected, graphStats, hazardStats }) => {
         </div>
         {graphStats && (
           <>
-            <div>Vertices: {graphStats.vertexCount || 0}</div>
-            <div>Edges: {graphStats.edgeCount || 0}</div>
+            <div>📍 Vertices: <span className="font-bold text-yellow-300">{graphStats.vertices || 0}</span></div>
+            <div>🔗 Edges: <span className="font-bold text-yellow-300">{graphStats.edges || 0}</span></div>
           </>
         )}
       </div>
-      {hazardStats && (
+      {hazardStats && hazardStats > 0 && (
         <div className="text-orange-400 font-semibold">
           🔥 {hazardStats} Active Hazards
         </div>
