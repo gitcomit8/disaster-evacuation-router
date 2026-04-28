@@ -82,10 +82,11 @@ function dijkstra(graph, startVertexId, endVertexId) {
     const currentDistance = distances.get(currentVertexId);
     const neighbors = graph.getNeighbors(currentVertexId);
 
-    for (const neighborId of neighbors) {
+    for (const neighbor of neighbors) {
+      const neighborId = neighbor.id;
       if (visited.has(neighborId)) continue;
 
-      const edgeWeight = graph.getEdgeWeight(currentVertexId, neighborId);
+      const edgeWeight = neighbor.weight;
 
       // Skip unreachable edges (infinite weight)
       if (!isFinite(edgeWeight)) continue;
