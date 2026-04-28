@@ -3,7 +3,7 @@ FROM node:18-alpine
 WORKDIR /app/backend
 
 COPY backend/package*.json ./
-RUN npm ci --only=production
+RUN npm install --production
 
 COPY backend/src ./src
 

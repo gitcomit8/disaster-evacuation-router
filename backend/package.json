@@ -1,6 +1,7 @@
 {
   "name": "disaster-evacuation-backend",
   "version": "1.0.0",
+  "type": "module",
   "description": "Real-time disaster evacuation routing engine with dynamic pathfinding",
   "main": "src/index.js",
   "scripts": {
